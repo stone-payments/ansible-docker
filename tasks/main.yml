@@ -1,32 +1,16 @@
----
-- include: "os/RedHat.yml"
+- name: determine if LVM is configured for docker
+  shell: ls /etc/docker.lvmconfig
+  ignore_errors: true
+  changed_when: false
+  register: lvmset
 
-- name: ensure config folder is present
-  file:
-    path: /etc/docker
-    state: directory
+- include: lvm.yml
+  when: lvmset|failed
+  static: no
 
-- name: ensure unit file folder is present
-  file:
-    path: /usr/lib/systemd/system
-    state: directory
+- include: tls.yml
+  when: docker_tls
+  static: no
 
-- name: ensure extra config folder is present
-  file:
-    path: /etc/systemd/system/docker.service.d
-    state: directory
+- include: daemon.yml
 
-- name: ensure extra file is present and up to date
-  copy:
-    src: docker.conf
-    dest: /etc/systemd/system/docker.service.d/docker.conf
-  notify:
-    - reload unit
-    - restart docker
-
-- meta: flush_handlers
-
-- name: ensure starts on system boot
-  service:
-    name: docker
-    enabled: yes

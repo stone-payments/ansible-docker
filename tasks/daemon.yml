@@ -1,0 +1,37 @@
+- name: install docker from EL repo
+  dnf:
+    name={{ item }}
+    state=present
+  with_items:
+    - docker
+
+- name: copy script to configure Docker group
+  copy:
+    src=docker_group.sh
+    dest=/usr/local/libexec/docker_group.sh
+    mode=0755
+  notify: restart docker
+
+- name: copy Docker systemd service unit file
+  copy:
+    src=docker.service
+    dest=/etc/systemd/system/docker.service
+    mode=0644
+  notify:
+    - reload systemd
+    - restart docker
+
+- name: copy Docker configs
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - src: docker.j2
+      dest: /etc/sysconfig/docker
+    - src: docker-network.j2
+      dest: /etc/sysconfig/docker-network
+    - src: docker-storage.j2
+      dest: /etc/sysconfig/docker-storage
+  notify: restart docker
+

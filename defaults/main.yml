@@ -1,0 +1,5 @@
+---
+docker_tls: false
+docker_logs: false
+docker_registry: false
+

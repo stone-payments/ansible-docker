@@ -1,18 +1,14 @@
+---
 galaxy_info:
-  author: Guilherme Oki
-  description: Docker
-  company: Stone Pagamentos
-  license: MIT
-  min_ansible_version: 2.1
+  author: Bernardo Donadio
+  description: Role for installing docker with TLS support
+  company: Buy4 Processamento de Pagamentos S.A.
+  license: license (GPLv2, CC-BY, etc)
+  min_ansible_version: 2.0.0
   platforms:
   - name: EL
     versions:
     - 7
   galaxy_tags:
-    - docker
-    - swarm
-    - swarmkit
-    - dockerswarm
-    - dockerswarmkit
-
-dependencies: []
+  - system
+dependencies: [ "buy4.lvm-docker" ]

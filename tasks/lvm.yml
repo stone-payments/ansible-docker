@@ -1,0 +1,73 @@
+- name: create VG docker on second disk
+  lvg:
+    vg: docker
+    pvs: /dev/xvdb
+    pesize: 4
+    state: present
+    force: no
+
+- name: create LV images on VG docker
+  lvol:
+    vg: docker
+    lv: images
+    size: "{{ dockerlvm_imagepercent }}%VG"
+    state: present
+  register: lvimages
+
+- name: create LV imagesmeta on VG docker
+  lvol:
+    vg: docker
+    lv: imagesmeta
+    size: 1%VG
+    state: present
+  when: lvimages|succeeded
+
+- name: create LV data on VG docker
+  lvol:
+    vg: docker
+    lv: data
+    size: "{{ 95 - dockerlvm_imagepercent }}%VG"
+    state: present
+  register: lvdata
+
+- name: create docker data filesystem
+  filesystem:
+    dev: /dev/docker/data
+    fstype: xfs
+    resizefs: yes
+    force: true
+  when: lvdata|succeeded
+
+- name: create docker data mountpoint
+  file:
+    path: /var/lib/docker
+    state: directory
+
+- name: mount VG data on docker
+  mount:
+    src: /dev/docker/data
+    name: /var/lib/docker
+    fstype: xfs
+    state: mounted
+
+- name: convert LV images to thinpool
+  shell:
+    lvconvert -y --zero n -c 512K --thinpool docker/images \
+      --poolmetadata docker/imagesmeta
+  ignore_errors: yes
+
+- name: copy LVM profile for docker/images
+  copy:
+    src: docker-images.profile
+    dest: /etc/lvm/profile/docker-images.profile
+
+- name: enable LVM profile on docker/images
+  shell:
+    lvchange --metadataprofile docker-images docker/images
+  ignore_errors: yes
+
+- name: set LVM as configured for docker
+  file:
+    path: /etc/lvmconfig/docker.lock
+    state: touch
+
