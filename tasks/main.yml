@@ -1,0 +1,32 @@
+---
+- include: "os/RedHat.yml"
+
+- name: ensure config folder is present
+  file:
+    path: /etc/docker
+    state: directory
+
+- name: ensure unit file folder is present
+  file:
+    path: /usr/lib/systemd/system
+    state: directory
+
+- name: ensure extra config folder is present
+  file:
+    path: /etc/systemd/system/docker.service.d
+    state: directory
+
+- name: ensure extra file is present and up to date
+  copy:
+    src: docker.conf
+    dest: /etc/systemd/system/docker.service.d/docker.conf
+  notify:
+    - reload unit
+    - restart docker
+
+- meta: flush_handlers
+
+- name: ensure starts on system boot
+  service:
+    name: docker
+    enabled: yes

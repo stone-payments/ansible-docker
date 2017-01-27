@@ -1,0 +1,5 @@
+---
+- hosts: tsuru
+  become: true
+  roles:
+    - { role: guilhermeoki.docker }

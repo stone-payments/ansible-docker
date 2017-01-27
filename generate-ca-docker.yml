@@ -1,0 +1,8 @@
+---
+ - hosts: 10.152.20.5
+   become: true
+   tasks:
+   - name: Generate CA keys
+     command: openssl -aes 256 -out ca-key.pem 4096 -passin pass:{{ CA_PASSWD }} chdir={{ DOCKER_SSL_DIR }}
+   - name: Generate CA
+     command: openssl req -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem -passin pass:{{ CA_PASSWD }} chdir={{ DOCKER_SSL_DIR }}

@@ -1,0 +1,16 @@
+---
+- hosts: tsuru
+  become: true
+  tasks:
+  - name: Ensure Docker SSL is present
+    file:
+      path: "{{ DOCKER_SSL_DIR }}"
+      state: directory
+  - name: Ensure docker CA cert
+    copy:
+      src: ca.pem
+      dest: "{{ DOCKER_SSL_DIR }}/ca.pem"
+  - name: Ensure docker CA-key 
+    copy:
+      src: ca-key.pem
+      dest: "{{ DOCKER_SSL_DIR }}/ca-key.pem"

@@ -1,0 +1,13 @@
+---
+- hosts: tsuru-api
+  tasks:
+  - name: create volume group for docker
+    lvg:
+      vg: vg.services
+      pvs: /dev/xvdf
+      pesize: 32  
+  - name: create lv thinpool
+    lvol:
+      vg: vg.services
+      thinpool: dockerpool
+      size: 9g
