@@ -1,6 +1,6 @@
-- name: reload systemd
-  shell: systemctl daemon-reload
-
+---
 - name: restart docker
-  service: name=docker state=restarted enabled=yes
-
+  service:
+    name: docker
+    state: restarted
+    enabled: yes

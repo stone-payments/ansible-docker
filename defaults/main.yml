@@ -3,3 +3,21 @@ docker_tls: false
 docker_logs: false
 docker_registry: false
 
+docker_storage_driver: "devicemapper"
+docker_storage_opts: ""
+docker_storage_wipesignatures: "true"
+
+docker_vg_dev: "/dev/sdb"
+docker_vg_name: "docker"
+
+docker_pool_name: "pool"
+docker_pool_size: "40%FREE"
+docker_pool_grow: "true"
+docker_pool_autoextend: "true"
+docker_pool_autoextend_threshold: "80"
+docker_pool_autoextend_percent: "20"
+
+docker_data: "yes"
+docker_data_name: "data"
+docker_data_size: "40%FREE"
+docker_data_path: "/var/lib/docker"

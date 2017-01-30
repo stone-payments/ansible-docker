@@ -1,0 +1,20 @@
+- name: install Docker engine
+  package:
+    name={{ item }}
+    state=present
+  with_items:
+    - docker
+
+- name: copy Docker configs
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: 0644
+  with_items:
+    - src: docker.j2
+      dest: /etc/sysconfig/docker
+    - src: docker-network.j2
+      dest: /etc/sysconfig/docker-network
+    - src: docker-storage-setup.j2
+      dest: /etc/sysconfig/docker-storage-setup
+  notify: restart docker

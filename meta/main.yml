@@ -11,4 +11,4 @@ galaxy_info:
     - 7
   galaxy_tags:
   - system
-dependencies: [ "buy4.lvm-docker" ]
+dependencies: []

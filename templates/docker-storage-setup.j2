@@ -1,0 +1,90 @@
+# Specify storage driver one wants to use with docker. Default is devicemapper.
+# Other possible options are overlay, overlay2 and "". Empty string means do
+# not do any storage setup.
+STORAGE_DRIVER={{ docker_storage_driver }}
+
+# A set of extra options that should be appended to the generated
+# DOCKER_STORAGE_OPTIONS string. These options will be passed to the Docker
+# daemon as-is and should be valid Docker storage options.
+EXTRA_DOCKER_STORAGE_OPTIONS="{{ docker_storage_opts }}"
+
+# A quoted, space-separated list of devices to be used.  This currently
+# expects the devices to be unpartitioned drives.  If "VG" is not specified,
+# then use of the root disk's extra space is implied.
+#
+DEVS="{{ docker_vg_dev }}"
+
+# The volume group to use for docker storage.  Defaults to the
+# volume group where the root filesystem resides.  If VG is specified and the
+# volume group does not exist, it will be created (which requires that "DEVS"
+# be nonempty, since we don't currently support putting a second partition on
+# the root disk).
+#
+VG={{ docker_vg_name }}
+
+POOL_LV_NAME={{ docker_pool_name }}
+
+# The desired size for the docker data LV.  It defaults using 60% of all
+# free space.
+#
+# DATA_SIZE can take values acceptable to "lvcreate -L" as well as some
+# values acceptable to to "lvcreate -l". If user intends to pass values
+# acceptable to "lvcreate -l", then only those values which contains "%"
+# in syntax are acceptable.  If value does not contain "%" it is assumed
+# value is suitable for "lvcreate -L".
+#
+DATA_SIZE={{ docker_pool_size }}
+
+# Enable resizing partition table backing root volume group. By default it
+# is disabled until and unless GROWPART=true is specified.
+#
+GROWPART={{ docker_pool_grow }}
+
+# Enable/disable automatic pool extension using lvm
+AUTO_EXTEND_POOL={{ docker_pool_autoextend }}
+
+# Auto pool extension threshold (in % of pool size)
+POOL_AUTOEXTEND_THRESHOLD={{ docker_pool_autoextend_threshold }}
+
+# Extend the pool by specified percentage when threshold is hit.
+POOL_AUTOEXTEND_PERCENT={{ docker_pool_autoextend_percent }}
+
+# Wipe any signatures (partition, filesystem, lvm etc) found on disk.
+# This could mean wiping the signature explicitly or using force options
+# of various commands to wipe/overwrite signatures. By default signatures
+# are not wiped and user needs to wipe these. One can change default behavior
+# by setting WIPE_SIGNATURES=true. Be careful before using this option
+# as this means if there was any leftover data on disk, it will be lost.
+WIPE_SIGNATURES={{ docker_storage_wipesignatures }}
+
+# By default no new volume and filesystem will be setup for docker
+# root dir. Docker creates /var/lib/docker/ on top of underlying filesystem
+# for storing images and containers.
+#
+# To carve out a separate logical volume for storing docker
+# images/containers/volumes data, set DOCKER_ROOT_VOLUME=yes
+# NOTE: devicemapper stores images/containers on thin pool.
+#
+# docker-storage-setup creates a logical volume with an XFS filesystem mounted
+# on docker root directory (default: /var/lib/docker).
+DOCKER_ROOT_VOLUME={{ docker_data }}
+
+# Specify the desired size for docker root volume. It defaults to 40% of all
+# free space.
+#
+# DOCKER_ROOT_VOLUME_SIZE can take values acceptable to "lvcreate -L" as well
+# as some values acceptable to to "lvcreate -l". If user intends to pass
+# values acceptable to "lvcreate -l", then only those values which
+# contains "%" in syntax are acceptable.  If value does not contain "%" it
+# is assumed value is suitable for "lvcreate -L".
+#
+# NOTE: If both STORAGE_DRIVER=devicemapper and DOCKER_ROOT_VOLUME=yes is
+# set, docker-storage-setup would set up the thin pool for devicemapper
+# first, followed by docker root volume. e.g if free space in the volume
+# group is 10G, devicemapper thin pool size would be 4G (40% of 10G)
+# and docker root volume would be 2.4G (40% of 6G).
+DOCKER_ROOT_VOLUME_SIZE={{ docker_data_size }}
+
+DOCKER_ROOT_LV_NAME={{ docker_data_name }}
+DOCKER_ROOT_DIR="{{ docker_data_path }}"
+DOCKER_METADATA_DIR="{{ docker_data_path }}"

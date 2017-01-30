@@ -16,7 +16,7 @@ OPTIONS="--selinux-enabled \
 --tlscacert=/etc/docker/certs.d/{{ docker_registry_dns }}/ca.crt \
 --tlsverify \
 {% endif %}
-{% if docker_label %}
+{% if docker_label is defined %}
 {{ docker_label }} \
 {% endif -%}
 "

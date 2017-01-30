@@ -1,16 +1,16 @@
-- name: determine if LVM is configured for docker
-  shell: ls /etc/docker.lvmconfig
-  ignore_errors: true
-  changed_when: false
-  register: lvmset
-
-- include: lvm.yml
-  when: lvmset|failed
-  static: no
-
-- include: tls.yml
+---
+- name: configure TLS structure for Docker
+  include: tls.yml
   when: docker_tls
   static: no
 
-- include: daemon.yml
+- name: install and configure docker engine
+  include: engine.yml
 
+- meta: flush_handlers
+
+- name: ensure Docker is up and running
+  service:
+    name: docker
+    state: started
+    enabled: yes
