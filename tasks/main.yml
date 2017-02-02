@@ -1,11 +1,11 @@
 ---
-- name: configure TLS structure for Docker
-  include: tls.yml
-  when: docker_tls
-  static: no
-
 - name: install and configure docker engine
   include: engine.yml
+
+- name: configure TLS structure for Docker
+  include: tls.yml
+  when: docker_tls.enabled
+  static: no
 
 - meta: flush_handlers
 

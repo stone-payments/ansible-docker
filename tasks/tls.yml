@@ -1,32 +1,18 @@
-- name: load host krb5 ticket
-  shell:
-    kinit -kt /etc/krb5.keytab
-  changed_when: false
-
-- name: add service docker to host
-  shell:
-    ipa service-add docker/`hostname`
-  register: servadd
-  changed_when: "servadd.stdout.find('Added') != -1"
-  failed_when: "servadd.stderr.find('already') == -1"
-
-- name: create registry directory
+---
+- name: ensure certs.d folder exists
   file:
-    path=/etc/docker/certs.d/{{ docker_registry_dns }}
-    state=directory
+    path: "/etc/docker/certs.d"
+    state: directory
 
-- name: request x509 certificate for service docker
-  shell:
-    ipa-getcert request -r -K docker/{{ ansible_fqdn }} -D {{ ansible_fqdn }} -U id-kp-serverAuth -N CN={{ ansible_fqdn }},O={{ docker_krb_realm }} -g 2048 -f /etc/docker/certs.d/{{ docker_registry_dns }}/client.cert -k /etc/docker/certs.d/{{ docker_registry_dns }}/client.key {{ docker_tls_extraopts | default('') }}
-  register: certreq
-  changed_when: "certreq.stdout.find('added') != -1"
-  failed_when: "certreq.stdout.find('already') == -1"
-  notify: restart docker
-
-- name: copy CA certificate to docker folder
-  copy:
-    src=/etc/ipa/ca.crt
-    dest=/etc/docker/certs.d/{{ docker_registry_dns }}/ca.crt
-    remote_src=true
-  notify: restart docker
-
+- name: write TLS files
+  template:
+    src: "{{ item.name }}.j2"
+    dest: "/etc/docker/certs.d/{{ item.name }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - name: ca.crt
+      mode: 0644
+    - name: engine.cert
+      mode: 0644
+    - name: engine.key
+      mode: 0600

@@ -1,60 +1,40 @@
 # /etc/sysconfig/docker
+# {{ ansible_managed }}
+#
+# See URL for docs:
+#   https://docs.docker.com/engine/reference/commandline/dockerd/
 
-# Modify these options if you want to change the way the docker daemon runs
-OPTIONS="--selinux-enabled \
-{% if docker_logs -%}
---log-driver=gelf \
---log-opt gelf-address={{ docker_logs_addr }} \
---log-opt tag={{ docker_logs_tag }} \
---log-opt env={{ docker_logs_env }} \
-{% endif %}
--H unix:///var/run/docker.sock \
-{% if docker_tls -%}
--H tcp://0.0.0.0:2376 \
---tlscert=/etc/docker/certs.d/{{ docker_registry_dns }}/client.cert \
---tlskey=/etc/docker/certs.d/{{ docker_registry_dns }}/client.key \
---tlscacert=/etc/docker/certs.d/{{ docker_registry_dns }}/ca.crt \
---tlsverify \
-{% endif %}
-{% if docker_label is defined %}
-{{ docker_label }} \
+OPTIONS="
+{%- if docker_debug -%}
+    --debug=true \
 {% endif -%}
-"
-DOCKER_CERT_PATH='/etc/docker/certs.d/'
+{%- if docker_selinux -%}
+    --selinux-enabled \
+{% endif -%}
+--log-driver={{ docker_log.driver }} \
+{% for item in docker_log.opts -%}
+    --log-opt={{ item }} \
+{% endfor -%}
+-H unix:///var/run/docker.sock \
+{% if docker_listen == "local" -%}
+    -H tcp://127.0.0.1:2376 \
+{% elif docker_listen == "remote" -%}
+    -H tcp://0.0.0.0:2376 \
+{% endif -%}
+{% if docker_tls.enabled -%}
+    --tlscacert=/etc/docker/certs.d/ca.crt \
+    --tlscert=/etc/docker/certs.d/engine.cert \
+    --tlskey=/etc/docker/certs.d/engine.key \
+    --tlsverify \
+{% endif -%}
+{% for item in docker_labels -%}
+    --label={{ item }} \
+{% endfor -%}
+{% for item in docker_registry.add -%}
+    --add-registry={{ item }} \
+{% endfor -%}
+{% for item in docker_registry.block -%}
+    --block-registry={{ item }} \
+{% endfor -%}"
 
-# If you want to add your own registry to be used for docker search and docker
-# pull use the ADD_REGISTRY option to list a set of registries, each prepended
-# with --add-registry flag. The first registry added will be the first registry
-# searched.
-{% if docker_registry -%}
-ADD_REGISTRY='--add-registry {{ docker_registry_dns }}'
-{% endif %}
-
-# If you want to block registries from being used, uncomment the BLOCK_REGISTRY
-# option and give it a set of registries, each prepended with --block-registry
-# flag. For example adding docker.io will stop users from downloading images
-# from docker.io
-# BLOCK_REGISTRY='--block-registry docker.io'
-
-# If you have a registry secured with https but do not have proper certs
-# distributed, you can tell docker to not look for full authorization by
-# adding the registry to the INSECURE_REGISTRY line and uncommenting it.
-# INSECURE_REGISTRY='--insecure-registry'
-
-# On an SELinux system, if you remove the --selinux-enabled option, you
-# also need to turn on the docker_transition_unconfined boolean.
-# setsebool -P docker_transition_unconfined 1
-
-# Location used for temporary files, such as those created by
-# docker load and build operations. Default is /var/lib/docker/tmp
-# Can be overriden by setting the following environment variable.
-# DOCKER_TMPDIR=/var/tmp
-
-# Controls the /etc/cron.daily/docker-logrotate cron job status.
-# To disable, uncomment the line below.
-# LOGROTATE=false
-
-# docker-latest daemon can be used by starting the docker-latest unitfile.
-# To use docker-latest client, uncomment below line
-# DOCKERBINARY=/usr/bin/docker-latest
-
+DOCKER_CERT_PATH="/etc/docker/certs.d/"
