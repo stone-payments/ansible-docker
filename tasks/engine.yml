@@ -5,6 +5,7 @@
     state=present
   with_items:
     - docker-{{ docker_version }}
+    - cloud-utils-growpart
 
 - name: copy Docker configs
   template:
