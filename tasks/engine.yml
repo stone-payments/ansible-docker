@@ -4,7 +4,7 @@
     name={{ item }}
     state=present
   with_items:
-    - docker
+    - docker-{{ docker_version }}
 
 - name: copy Docker configs
   template:

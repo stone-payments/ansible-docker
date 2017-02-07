@@ -1,4 +1,5 @@
 ---
+docker_version: "1.12.*"
 docker_debug: false
 docker_selinux: true
 
