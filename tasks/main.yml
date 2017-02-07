@@ -14,3 +14,8 @@
     name: docker
     state: started
     enabled: yes
+
+- name: ensure Docker storage is correctly working
+  shell: systemctl status docker-storage-setup \
+    | grep "(code=exited, status=0/SUCCESS)"
+  changed_when: false
