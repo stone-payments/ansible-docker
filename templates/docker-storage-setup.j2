@@ -11,14 +11,18 @@ EXTRA_DOCKER_STORAGE_OPTIONS="
         --storage-opt={{ item }}
     {%- endfor -%}"
 
+{% if docker_vg.devs is defined %}
 DEVS="{% for item in docker_vg.devs %}{{ item }} {% endfor %}"
+{% endif %}
 VG={{ docker_vg.name }}
 DATA_SIZE="{{ docker_pool.size }}"
 GROWPART={{ docker_pool.grow }}
 POOL_LV_NAME={{ docker_pool.name }}
 AUTO_EXTEND_POOL={% if docker_pool.autoextend.enabled %}yes{% else %}no{% endif %}
+{% if docker_pool.autoextend.enabled %}
 POOL_AUTOEXTEND_THRESHOLD={{ docker_pool.autoextend.threshold }}
 POOL_AUTOEXTEND_PERCENT={{ docker_pool.autoextend.percent }}
+{% endif %}
 WIPE_SIGNATURES={{ docker_storage.wipesignatures | lower }}
 
 DOCKER_ROOT_VOLUME={% if docker_data.enabled %}yes{% else %}no{% endif %}
