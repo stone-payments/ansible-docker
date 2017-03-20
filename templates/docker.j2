@@ -35,6 +35,9 @@ OPTIONS="
 {% endfor -%}
 {% for item in docker_registry.block -%}
     --block-registry={{ item }} \
-{% endfor -%}"
+{% endfor -%}
+{% if docker_bip is defined -%}
+    --bip={{ docker_bip }}
+{% endif -%}"
 
 DOCKER_CERT_PATH="/etc/docker/certs.d/"
