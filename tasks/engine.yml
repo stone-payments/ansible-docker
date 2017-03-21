@@ -19,4 +19,6 @@
       dest: /etc/sysconfig/docker-network
     - src: docker-storage-setup.j2
       dest: /etc/sysconfig/docker-storage-setup
+    - src: daemon.json.j2
+      dest: /etc/docker/daemon.json
   notify: restart docker

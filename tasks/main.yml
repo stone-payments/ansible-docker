@@ -19,3 +19,4 @@
   shell: systemctl status docker-storage-setup \
     | grep "(code=exited, status=0/SUCCESS)"
   changed_when: false
+  when: docker_vagrant is not defined
