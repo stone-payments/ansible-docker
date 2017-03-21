@@ -4,4 +4,8 @@
 # See URL for docs
 #   https://docs.docker.com/engine/reference/commandline/dockerd/
 
-DOCKER_NETWORK_OPTIONS="--userland-proxy=false"
+DOCKER_NETWORK_OPTIONS=" \
+--userland-proxy=false \
+{% if docker_bip is defined -%}
+--bip={{ docker_bip }}
+{% endif -%}"
