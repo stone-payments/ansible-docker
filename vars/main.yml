@@ -1,0 +1,20 @@
+---
+docker_etc: "/etc/docker"
+docker_certs: "{{ docker_etc }}/certs.d"
+
+docker_defaults:
+    debug: false
+    hosts:
+      - "unix:///var/run/docker.sock"
+    live-restore: true
+    log-driver: "journald"
+    log-level: "info"
+    selinux-enabled: true
+    userland-proxy: false
+
+docker_defaults_tls:
+    tls: "{{ docker_tls.enabled }}"
+    tlscacert: "{{ docker_certs }}/ca.crt"
+    tlscert: "{{ docker_certs }}/engine.cert"
+    tlskey: "{{ docker_certs }}/engine.key"
+    tlsverify: "{{ docker_tls.enabled }}"

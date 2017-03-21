@@ -4,38 +4,6 @@
 # See URL for docs:
 #   https://docs.docker.com/engine/reference/commandline/dockerd/
 
-OPTIONS="
-{%- if docker_debug -%}
-    --debug=true \
-{% endif -%}
-{%- if docker_selinux -%}
-    --selinux-enabled \
-{% endif -%}
---log-driver={{ docker_log.driver }} \
-{% for item in docker_log.opts -%}
-    --log-opt={{ item }} \
-{% endfor -%}
--H unix:///var/run/docker.sock \
-{% if docker_listen == "local" -%}
-    -H tcp://127.0.0.1:2376 \
-{% elif docker_listen == "remote" -%}
-    -H tcp://0.0.0.0:2376 \
-{% endif -%}
-{% if docker_tls.enabled -%}
-    --tlscacert=/etc/docker/certs.d/ca.crt \
-    --tlscert=/etc/docker/certs.d/engine.cert \
-    --tlskey=/etc/docker/certs.d/engine.key \
-    --tlsverify \
-{% endif -%}
-{% for item in docker_labels -%}
-    --label={{ item }} \
-{% endfor -%}
-{% for item in docker_registry.add -%}
-    --add-registry={{ item }} \
-{% endfor -%}
-{% for item in docker_registry.block -%}
-    --block-registry={{ item }} \
-{% endfor -%}
-"
+OPTIONS=""
 
 DOCKER_CERT_PATH="/etc/docker/certs.d/"

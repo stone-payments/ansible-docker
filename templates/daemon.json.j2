@@ -1,0 +1,5 @@
+{% if docker_tls.enabled %}
+{{ docker_defaults | combine(docker_defaults_tls, recursive=true) | combine(docker_config, recursive=true) | to_nice_json }}
+{% else %}
+{{ docker_defaults | combine(docker_config, recursive=true) | to_nice_json }}
+{% endif %}

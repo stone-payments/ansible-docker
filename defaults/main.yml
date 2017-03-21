@@ -1,31 +1,5 @@
 ---
 docker_version: "1.12.*"
-docker_debug: false
-docker_selinux: true
-
-# If TLS is enabled, you must fill the ca, cert and key variables with the
-# *contents* of those files
-docker_tls:
-  enabled: false
-  ca: ""
-  cert: ""
-  key: ""
-
-docker_log:
-  driver: "journald"
-  opts: []
-
-# Options are:
-#   socketOnly: listen only on default socket
-#   local: listen on IP loopback
-#   remote: listen on all networks (PLEASE ENABLE TLS)
-docker_listen: "socketOnly"
-
-docker_labels: []
-
-docker_registry:
-  add: []
-  block: []
 
 docker_storage:
   driver: "devicemapper"
@@ -65,3 +39,14 @@ docker_data:
   name: "data"
   # Size can be any string that LVM recognizes
   size: "40%FREE"
+
+# If TLS is enabled, you must fill the ca, cert and key variables with the
+# *contents* of those files
+docker_tls:
+  enabled: false
+  ca: ""
+  cert: ""
+  key: ""
+
+# Override any config in daemon.json inside the dict
+docker_config: {}
