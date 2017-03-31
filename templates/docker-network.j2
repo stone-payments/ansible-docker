@@ -4,4 +4,4 @@
 # See URL for docs
 #   https://docs.docker.com/engine/reference/commandline/dockerd/
 
-DOCKER_NETWORK_OPTIONS=""
+DOCKER_NETWORK_OPTIONS="{% if docker_bip is defined %}--bip {{ docker_bip }}{% endif %}"

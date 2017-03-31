@@ -16,3 +16,4 @@
       mode: "0644"
     - name: engine.key
       mode: "0600"
+  notify: restart docker
