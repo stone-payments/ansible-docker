@@ -5,7 +5,7 @@ docker_certs: "{{ docker_etc }}/certs.d"
 docker_defaults:
     debug: false
     exec-opts:
-      - "native.cgroupdriver=cgroupfs"
+      - "native.cgroupdriver=systemd"
     hosts:
       - "unix:///var/run/docker.sock"
     live-restore: false
