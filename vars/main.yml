@@ -4,9 +4,11 @@ docker_certs: "{{ docker_etc }}/certs.d"
 
 docker_defaults:
     debug: false
+    exec-opts:
+      - "native.cgroupdriver=cgroupfs"
     hosts:
       - "unix:///var/run/docker.sock"
-    live-restore: true
+    live-restore: false
     log-driver: "journald"
     log-level: "info"
     selinux-enabled: true

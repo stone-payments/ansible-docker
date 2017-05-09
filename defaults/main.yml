@@ -48,5 +48,7 @@ docker_tls:
   cert: ""
   key: ""
 
+docker_plugin_rhel: true
+
 # Override any config in daemon.json inside the dict
 docker_config: {}
