@@ -31,7 +31,9 @@ ExecStart=/usr/bin/dockerd-current \
           $BLOCK_REGISTRY \
           $INSECURE_REGISTRY
 ExecReload=/bin/kill -s HUP $MAINPID
+{% if docker_workaround_promisc %}
 ExecStartPost=/usr/sbin/ip link set docker0 promisc on
+{% endif %}
 LimitNOFILE=1048576
 LimitNPROC=1048576
 LimitCORE=infinity

@@ -1,0 +1,7 @@
+---
+- name: disable IPv6
+  sysctl:
+    name: net.ipv6.all.disable_ipv6
+    value: 1
+    state: present
+  when: docker_workaround_noIPv6

@@ -1,4 +1,7 @@
 ---
+- name: setup docker workarounds
+  include: workarounds.yml
+
 - name: install and configure docker engine
   include: engine.yml
 
