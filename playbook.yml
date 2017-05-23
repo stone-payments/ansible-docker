@@ -1,6 +1,6 @@
 ---
 - hosts: all
   roles:
-    - role: buy4.docker
+    - role: stone-payments.docker
   vars:
     docker_vagrant: true
