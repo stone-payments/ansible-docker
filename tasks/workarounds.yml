@@ -5,3 +5,10 @@
     value: 1
     state: present
   when: docker_workaround_noIPv6
+
+- name: avoid Docker DNSv6 bug
+  lineinfile:
+    dest: "/etc/resolv.conf"
+    regexp: "^options single-request"
+    line: "options single-request"
+  when: docker_workaround_dns

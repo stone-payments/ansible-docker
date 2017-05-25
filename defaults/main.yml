@@ -52,6 +52,7 @@ docker_plugin_rhel: true
 
 docker_workaround_noIPv6: false
 docker_workaround_promisc: true
+docker_workaround_dns: true
 
 # Override any config in daemon.json inside the dict
 docker_config: {}
