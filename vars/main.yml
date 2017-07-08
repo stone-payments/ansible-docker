@@ -8,7 +8,7 @@ docker_defaults:
       - "native.cgroupdriver=systemd"
     hosts:
       - "unix:///var/run/docker.sock"
-    live-restore: false
+    live-restore: true
     log-driver: "journald"
     log-level: "info"
     selinux-enabled: true
