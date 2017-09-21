@@ -4,7 +4,7 @@
 
 while true; do
     sleep $POOL
-    exec $CMD &
+    exec $CMD_TEST &
     PID=$!
 
     sleep $LIMIT
