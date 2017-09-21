@@ -20,3 +20,5 @@ docker_defaults_tls:
     tlscert: "{{ docker_certs }}/engine.cert"
     tlskey: "{{ docker_certs }}/engine.key"
     tlsverify: "{{ docker_tls.enabled }}"
+
+docker_watchdog_path: "/usr/bin/watchdog.sh"

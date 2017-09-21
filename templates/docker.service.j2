@@ -4,6 +4,9 @@ Documentation=http://docs.docker.com
 After=network.target
 Wants=docker-storage-setup.service
 Requires=docker-cleanup.timer
+{% if docker_workaround_watchdog is defined and docker_workaround_watchdog %}
+Requires=docker-watchdog.service
+{% endif %}
 {% if docker_plugin_rhel is defined and docker_plugin_rhel %}
 Requires=rhel-push-plugin.socket
 {% endif %}
