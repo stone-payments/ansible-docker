@@ -3,6 +3,7 @@
 # seconds. If it does, executes CMD_OK, otherwise executes CMD_FALSE.
 
 while true; do
+    sleep $POOL
     exec $CMD &
     PID=$!
 
@@ -16,5 +17,4 @@ while true; do
     else
         $CMD_OK
     fi
-    sleep $POOL
 done
