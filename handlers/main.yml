@@ -7,3 +7,8 @@
     name: docker
     state: restarted
     enabled: yes
+
+- name: restart watchdog
+  service:
+    name: docker-watchdog
+    state: restarted

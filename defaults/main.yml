@@ -53,6 +53,9 @@ docker_plugin_rhel: true
 docker_workaround_noIPv6: false
 docker_workaround_promisc: true
 docker_workaround_dns: true
+docker_workaround_watchdog: true
+docker_workaround_watchdog_pool: 60
+docker_workaround_watchdog_limit: 7
 
 # Override any config in daemon.json inside the dict
 docker_config: {}

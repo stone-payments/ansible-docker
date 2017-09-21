@@ -12,3 +12,26 @@
     regexp: "^options single-request"
     line: "options single-request"
   when: docker_workaround_dns
+
+- block:
+  - name: install watchdog script
+    copy:
+      src: watchdog.sh
+      dest: "{{ docker_watchdog_path }}"
+      mode: "0755"
+    notify:
+      - restart watchdog
+  - name: install docker watchdog
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      mode: "0644"
+    with_items:
+      - src: docker_watchdog.env.j2
+        dest: /etc/sysconfig/docker_watchdog
+      - src: docker-watchdog.service.j2
+        dest: /etc/systemd/system/docker-watchdog.service
+    notify:
+      - reload systemd
+      - restart watchdog
+  when: docker_workaround_watchdog

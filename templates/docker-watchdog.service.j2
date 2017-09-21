@@ -1,0 +1,9 @@
+[Unit]
+Description=Docker Watchdog
+After=network.target
+Requires=docker.service
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/sysconfig/docker_watchdog
+ExecStart=/bin/bash {{docker_watchdog_path}}
