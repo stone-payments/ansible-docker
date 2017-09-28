@@ -4,7 +4,7 @@
     name={{ item }}
     state=present
   with_items:
-    - docker-{{ docker_version }}
+    - "{{ docker_package }}-{{ docker_version }}"
     - cloud-utils-growpart
 
 - name: install Docker systemd service
