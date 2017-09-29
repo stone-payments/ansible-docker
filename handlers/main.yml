@@ -4,7 +4,7 @@
 
 - name: restart docker
   service:
-    name: docker
+    name: "{{ docker_package }}"
     state: restarted
     enabled: yes
 

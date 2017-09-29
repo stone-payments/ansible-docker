@@ -1,4 +1,4 @@
-# /etc/sysconfig/docker
+# /etc/sysconfig/{{ docker_package }}
 # {{ ansible_managed }}
 #
 # See URL for docs:
@@ -6,4 +6,4 @@
 
 OPTIONS=""
 
-DOCKER_CERT_PATH="/etc/docker/certs.d/"
+DOCKER_CERT_PATH="/etc/{{ docker_package }}/certs.d/"

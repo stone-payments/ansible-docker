@@ -1,5 +1,5 @@
 ---
-docker_package: "docker"
+docker_package: "docker" # Either "docker" or "docker-latest"
 docker_version: "1.12.*"
 
 docker_storage:

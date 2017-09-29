@@ -1,13 +1,13 @@
 ---
 - name: ensure certs.d folder exists
   file:
-    path: "/etc/docker/certs.d"
+    path: "/etc/{{ docker_package }}/certs.d"
     state: directory
 
 - name: write TLS files
   template:
     src: "{{ item.name }}.j2"
-    dest: "/etc/docker/certs.d/{{ item.name }}"
+    dest: "/etc/{{ docker_package}}/certs.d/{{ item.name }}"
     mode: "{{ item.mode }}"
   with_items:
     - name: ca.crt

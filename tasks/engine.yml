@@ -9,8 +9,8 @@
 
 - name: install Docker systemd service
   template:
-    src: docker.service.j2
-    dest: /etc/systemd/system/docker.service
+    src: "{{ docker_package }}.service.j2"
+    dest: /etc/systemd/system/{{ docker_package}}.service
     mode: "0644"
   notify:
     - reload systemd
@@ -23,11 +23,11 @@
     mode: "0644"
   with_items:
     - src: docker.j2
-      dest: /etc/sysconfig/docker
+      dest: /etc/sysconfig/{{ docker_package }}
     - src: docker-network.j2
-      dest: /etc/sysconfig/docker-network
+      dest: /etc/sysconfig/{{ docker_package }}-network
     - src: docker-storage-setup.j2
-      dest: /etc/sysconfig/docker-storage-setup
+      dest: /etc/sysconfig/{{ docker_package }}-storage-setup
     - src: daemon.json.j2
-      dest: /etc/docker/daemon.json
+      dest: /etc/{{ docker_package }}/daemon.json
   notify: restart docker

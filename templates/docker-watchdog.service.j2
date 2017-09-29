@@ -1,7 +1,7 @@
 [Unit]
 Description=Docker Watchdog
 After=network.target
-Requires=docker.service
+Requires={{ docker_package }}.service
 
 [Service]
 Type=simple
