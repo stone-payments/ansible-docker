@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Test if a given CMD_TEST command returns within LIMIT seconds every POOL
-# seconds. If it does, executes CMD_OK, otherwise executes CMD_FALSE.
+# Test if a given CMD_TEST command returns within CMD_TEST_MAX_DURATION seconds.
+# If it does, executes CMD_OK, otherwise executes CMD_FALSE.
 
 # This workaround script was created to automatically recover from a series
 # of know bugs on docker in which it frezzes. An example: https://github.com/moby/moby/issues/13885
@@ -11,11 +11,10 @@
 # Another problem that can cause problems is the daemon taking a lot of time to restart.
 
 while true; do
-    sleep $POOL
     exec $CMD_TEST &
     PID=$!
 
-    sleep $LIMIT
+    sleep $CMD_TEST_MAX_DURATION
     ps -p$PID &>/dev/null
     OUT=$?
 
