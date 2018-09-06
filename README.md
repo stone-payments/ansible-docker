@@ -37,6 +37,22 @@ options include:
 * Enable/disable some Docker plugins (so far, only support for RHEL registry plugin);
 * Custom configs that should be passed directly to `/etc/docker/daemon.json` config file.
 
+## Testing
+This project uses py.test and testinfra packages to run tests.
+
+First, install the dependencies and activate the virtualenv with:
+```
+pipenv install
+pipenv shell
+```
+
+Then run tests:
+```
+pytest
+```
+
+You must have Docker 17.06 or greater on your machine since the tests run inside a container and uses the `--mount` docker flag.
+
 ## Contributing
 Just open a PR! We love PRs.
 
